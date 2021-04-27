@@ -12,7 +12,7 @@ struct aluno
 {
     int id;
     char cpf[10];
-    char[50] nome;
+    char nome[50];
     listaMateria *listMat = NULL;
     aluno *prox = NULL;
 };
@@ -92,36 +92,70 @@ int inserirAluPer(int id_alu, periodo *&per)
     }
     else
     {
+        fflush(stdin);
         aluno *aux = (aluno *)malloc(sizeof(aluno));
         aux->id = id_alu;
         printf("Digite o nome do aluno:\n ");
+        scanf("%[^\n]s",aux->nome);
+        fflush(stdin);
         printf("Digite o cpf do aluno:\n ");
-
+        scanf("%[^\n]s",aux->cpf);
+        fflush(stdin);
         aux->prox = per->periodoAlu;
         per->periodoAlu = aux;
         return 1;
-        
-        int main()
-        {
-            periodo *init = (periodo *)malloc(sizeof(periodo));
-            // ini->tmp
-            // cout << init->ano << "\n";
-            // inserirAluPer(45,init);
+    }
+}
 
-            // //Criar mat�ria
-            // init->periodoMat = (materia*)malloc(sizeof(materia));
-            // init->periodoMat->id = 1;
-            // init->periodoMat->cred = 7;
-            // init->periodoMat->nome = "Matem�tica";
-            // init->periodoMat->professor = "Pepe";
+int inserirMatPer(int id_mat, periodo *&per)
+{
+    if (buscarMatPer(per->periodoMat, id_mat) != nullptr)
+    {
+        printf("A materia ja esta cadastrada\n");
+        return 0;
+    }
+    else
+    {
+        fflush(stdin);
+        materia *aux = (materia *)malloc(sizeof(materia));
+        aux->id = id_mat;
+        printf("Digite o nome do materia:\n");
+        scanf("%[^\n]s",aux->nome);
+        fflush(stdin);
+        printf("Digite o nome do professor:\n");
+        scanf("%[^\n]s",aux->professor);
+        fflush(stdin);
+        printf("Digite o numero de creditos da materia:\n");
+        scanf(" %d", &aux->cred);
+        fflush(stdin);
+        aux->prox = per->periodoMat;
+        per->periodoMat = aux;
+        return 1;
+    }
+}
 
-            // //Criar aluno
-            // init->periodoAlu = (aluno*)malloc(sizeof(aluno));
-            // init->periodoAlu->id = 1;
-            // init->periodoAlu->cpf = "06747288580";
-            // init->periodoAlu->nome = "Aguiar";
+int main()
+{
+    periodo *init = (periodo *)malloc(sizeof(periodo));
+    // ini->tmp
+    // cout << init->ano << "\n";
+     inserirAluPer(45,init);
+     inserirMatPer(32,init);
 
-            //Cadastras na mat�ria
+    // //Criar mat�ria
+    // init->periodoMat = (materia*)malloc(sizeof(materia));
+    // init->periodoMat->id = 1;
+    // init->periodoMat->cred = 7;
+    // init->periodoMat->nome = "Matem�tica";
+    // init->periodoMat->professor = "Pepe";
 
-            free(init);
-        }
+    // //Criar aluno
+    // init->periodoAlu = (aluno*)malloc(sizeof(aluno));
+    // init->periodoAlu->id = 1;
+    // init->periodoAlu->cpf = "06747288580";
+    // init->periodoAlu->nome = "Aguiar";
+
+    //Cadastras na mat�ria
+
+    free(init);
+}
