@@ -59,8 +59,24 @@ periodo *buscarPer(periodo *inicio, char aux_ano[10])
         return inicio;
     if (strcmp(inicio->ano, aux_ano) == 0)
         return inicio;
+    return buscarPer(inicio->prox, aux_ano);
+}
+
+int inserirPer(periodo *&inicio, char aux_ano[10])
+{
+    if (buscarPer(inicio, aux_ano) != nullptr)
+    {
+        printf("O periodo ja esta cadastrado\n");
+        return 0;
+    }
     else
-        return buscarPer(inicio->prox, aux_ano);
+    {
+        periodo *aux = (periodo *)malloc(sizeof(periodo));
+        strcpy(aux->ano, aux_ano);
+        aux->prox = inicio;
+        inicio = aux;
+        return 1;
+    }
 }
 
 materia *buscarMatPer(materia *inicio, int id)
