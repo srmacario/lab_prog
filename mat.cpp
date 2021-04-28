@@ -144,6 +144,48 @@ int inserirMatPer(periodo *&per, int id_mat)
     }
 }
 
+int menuPer()
+{
+    int opcao;
+    printf("voce esta consultando um periodo\n");
+    printf("Escolha a opcao:\n");
+    printf("1. Consultar dados de um aluno\n");
+    printf("2. Consultar materias\n");
+    printf("3. Inserir materia\n");
+    printf("4. Remover materia\n");
+    printf("0. Sair\n");
+
+    scanf("%d", &opcao);
+    return opcao;
+}
+
+int menuPerMat()
+{
+    int opcao;
+    printf("Voce esta consultando uma materia\n");
+    printf("Escolha a opcao:\n");
+    printf("1. Consultar lista de alunos\n");
+    printf("2. Inserir aluno\n");
+    printf("3. Remover aluno\n");
+    printf("0. Sair\n");
+
+    scanf("%d", &opcao);
+    return opcao;
+}
+int menuMain()
+{
+    int opcao;
+    printf("Escolha a opcao:\n");
+    printf("1. Consultar periodo\n");
+    printf("2. Inserir periodo\n");
+    printf("3. Remover periodo\n");
+    printf("0. Sair\n");
+
+    scanf("%d", &opcao);
+    return opcao;
+}
+
+
 int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     // ini->tmp
