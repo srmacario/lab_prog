@@ -8,6 +8,10 @@ struct listaAluno;
 struct listaMateria;
 struct periodo;
 
+
+
+//Só para fins de teste
+
 //função melhorada pra fflush, fflush varia pra linux e windows
 void clean_stdin(){
     int c;
@@ -207,7 +211,7 @@ int main(){
     // ini->tmp
     // cout << init->ano << "\n";
 
-    
+
     inserirAluPer(init, 45);
 
     //  inserirMatPer(32,init);
