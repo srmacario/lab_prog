@@ -50,7 +50,18 @@ struct periodo
     char ano[10];
     aluno *periodoAlu = NULL;
     materia *periodoMat = NULL;
+    periodo *prox = NULL;
 };
+
+periodo *buscarPer(periodo *inicio, char aux_ano[10])
+{
+    if (inicio == nullptr)
+        return inicio;
+    if (strcmp(inicio->ano, aux_ano) == 0)
+        return inicio;
+    else
+        return buscarPer(inicio->prox, aux_ano);
+}
 
 materia *buscarMatPer(materia *inicio, int id)
 {
@@ -137,7 +148,10 @@ int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     // ini->tmp
     // cout << init->ano << "\n";
+
+    
     inserirAluPer(init, 45);
+
     //  inserirMatPer(32,init);
 
     // //Criar mat�ria
