@@ -237,6 +237,30 @@ int inserirPer(periodo *&inicio, char aux_ano[10])
     }
 }
 
+
+int matPorAlu(periodo *inicio, int id)
+{
+    aluno *aux = buscarAluPer(inicio->periodoAlu, id);
+    listaMateria *matAtual = nullptr;
+    if(aux == nullptr)
+    {
+        printf("Esse aluno nao esta cadastrado neste periodo.\n");
+        return 0;
+    }
+    else
+    {
+        printf("Materias em que o aluno esta matriculado:\n");
+        printf("ID\tMateria\t\tProf.\t\tCreditos Necessarios\n");
+        matAtual = aux->listMat;
+        while(matAtual != nullptr)
+        {
+            printf("%d\t%s\t\t%s\t\t%d\n", matAtual->mat->id, matAtual->mat->nome, matAtual->mat->professor, matAtual->mat->cred);
+            matAtual = matAtual->prox;
+        }
+        return 1;
+    }
+}
+
 int menuMain()
 {
     int opcao;
@@ -293,10 +317,6 @@ int removeAluPer(periodo *&per, int id_alu){
     return 1;
 }
 
-
-
-
-
 int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     init -> periodoAlu = nullptr;
@@ -341,6 +361,7 @@ int main(){
     inserirAluMat(init);
 
     aluPorMat(init, 1);
+    matPorAlu(init, 50);
     //------------------------------------
     free(init);
 }
