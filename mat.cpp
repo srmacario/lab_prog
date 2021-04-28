@@ -8,6 +8,7 @@ struct listaAluno;
 struct listaMateria;
 struct periodo;
 
+//função melhorada pra fflush, fflush varia pra linux e windows
 void clean_stdin(){
     int c;
     do{
@@ -87,7 +88,7 @@ listaMateria *buscarMatAlu(listaMateria *inicio, int id)
     return buscarMatAlu(inicio->prox, id); //não precisa de else, ja vai cair aqui automatico
 }
 
-int inserirAluPer(int id_alu, periodo *&per)
+int inserirAluPer(periodo *&per, int id_alu)
 {
     if (buscarAluPer(per->periodoAlu, id_alu) != nullptr){
         printf("Aluno ja esta cadastrado\n");
@@ -108,7 +109,7 @@ int inserirAluPer(int id_alu, periodo *&per)
     }
 }
 
-int inserirMatPer(int id_mat, periodo *&per)
+int inserirMatPer(periodo *&per, int id_mat)
 {
     if (buscarMatPer(per->periodoMat, id_mat) != nullptr){
         printf("A materia ja esta cadastrada\n");
@@ -136,8 +137,9 @@ int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     // ini->tmp
     // cout << init->ano << "\n";
-     inserirAluPer(45,init);
-     inserirMatPer(32,init);
+    inserirAluPer(45,init);
+    cout << (buscarAluPer(init, 45)) -> id << "\n";
+    //  inserirMatPer(32,init);
 
     // //Criar mat�ria
     // init->periodoMat = (materia*)malloc(sizeof(materia));
