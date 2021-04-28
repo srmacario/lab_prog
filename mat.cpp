@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -56,8 +57,19 @@ listaAluno *buscarAluMat(listaAluno *inicio, int id)
     return buscarAluMat(inicio->prox, id); //não precisa de else, ja vai cair aqui automatico
 }
 
+listaAluno *buscarAnteriorAluMat(listaAluno *inicio, int id){
+    //se a lista nao existir ou se quem for removido for o primeiro, retorna null
+    if (inicio == nullptr or inicio->alu->id == id)
+        return nullptr;
+    //se for o ultimo da lista, ou o proximo for o aluno desejado, retorna o ponteiro atual
+    if (inicio->prox == nullptr or inicio->prox->alu->id == id)
+        return inicio;
+    return buscarAnteriorAluMat(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
+}
+
 aluno *buscarAluPer(aluno *inicio, int id)
 {
+    cout << inicio << "\n";
     if (inicio == nullptr)
         return nullptr;
     if (inicio->id == id)
@@ -65,13 +77,15 @@ aluno *buscarAluPer(aluno *inicio, int id)
     return buscarAluPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
 }
 
-aluno *buscarAnteriorAlu(aluno *inicio, int id)
+aluno *buscarAnteriorAluPer(aluno *inicio, int id)
 {
-    if (inicio == nullptr)
+    //se a lista nao existir ou se quem for removido for o primeiro, retorna null
+    if (inicio == nullptr or inicio->id == id)
         return nullptr;
+    //se for o ultimo da lista, ou o proximo for o aluno desejado, retorna o ponteiro atual
     if (inicio->prox == nullptr or inicio->prox->id == id)
         return inicio;
-    return buscarAluPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
+    return buscarAnteriorAluPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
 }
 
 listaMateria *buscarMatAlu(listaMateria *inicio, int id)
@@ -205,6 +219,7 @@ int inserirAluPer(periodo *&per, int id_alu)
     else
     {
         aluno *aux = (aluno *)malloc(sizeof(aluno));
+        aux->prox = nullptr;
         aux->id = id_alu;
         printf("Digite o nome do aluno:\n ");
         scanf(" %[^\n]s", aux->nome);
@@ -366,20 +381,64 @@ int menuPerMat()
     return opcao;
 }
 
-int removeAluPer(periodo *&per, int id_alu)
-{
-    aluno *atual = buscarAnteriorAlu(per->periodoAlu, id_alu);
-    if (atual == nullptr or atual->prox == nullptr)
-    {
-        if (per->periodoAlu->id == id_alu)
-        {
-            per->periodoAlu = per->periodoAlu->prox;
-            return 1;
+int removeAluMat(materia *&mat, int id_alu){
+    listaAluno *atual = buscarAnteriorAluMat(mat->listAlu, id_alu), *prox;
+    
+    //atual == nullptr: não existe lista ou preciso remover a head
+    if(atual == nullptr){
+        //se a head não existir, não faz nada
+        if(mat->listAlu == nullptr){
+           printf("Aluno não está na matéria!");
+            return 0; 
         }
+        //head existe e quero remove-la, troco
+        mat->listAlu = mat -> listAlu -> prox;
+        // free?
+        return 1;
+    }
+    //atual->prox == nullptr, chegou ao final e não achou
+    else if(atual->prox == nullptr){
         printf("Aluno não está na lista!");
         return 0;
     }
-    atual->prox = atual->prox->prox;
+    //coloca o prox pra amontar para o proximo da lista
+    prox = atual->prox->prox;
+    free(atual->prox);
+    atual->prox = prox;
+    return 1;
+}
+
+int removeAluPer(periodo *&per, int id_alu)
+{
+    aluno *atual = buscarAnteriorAluPer(per->periodoAlu, id_alu), *prox;
+    
+    //atual == nullptr: não existe lista ou preciso remover a head
+    if(atual == nullptr){
+        //se a head não existir, não faz nada
+        if(per->periodoAlu == nullptr){
+           printf("Aluno não está na lista!");
+            return 0; 
+        }
+        //head existe e quero remove-la, troco
+        listaMateria *matAtual = per->periodoAlu->listMat;
+        while(matAtual != nullptr){
+            removeAluMat(matAtual->mat, id_alu);
+            matAtual = matAtual -> prox;
+            //free?
+        }
+        per->periodoAlu = per -> periodoAlu -> prox;
+        // free?
+        return 1;
+    }
+    //atual->prox == nullptr, chegou ao final e não achou
+    else if(atual->prox == nullptr){
+        printf("Aluno não está na lista!");
+        return 0;
+    }
+    //coloca o prox pra apontar para o proximo da lista
+    prox = atual->prox->prox;
+    free(atual->prox);
+    atual->prox = prox;
     return 1;
 }
 
@@ -390,6 +449,7 @@ int main()
     init->periodoAlu = nullptr;
     init->periodoMat = nullptr;
     int opcaoMain = -1;
+
     do
     {
         opcaoMain = menuMain();
@@ -482,6 +542,5 @@ int main()
         }
 
     } while (opcaoMain);
-
     free(init);
 }
