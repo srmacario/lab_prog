@@ -160,6 +160,28 @@ int inserirMatPer(periodo *&per, int id_mat)
     }
 }
 
+aluno *buscarAnteriorAlu(aluno *inicio, int id){
+    if (inicio == nullptr or inicio->prox == nullptr)
+        return nullptr;
+    if (inicio->prox->id == id)
+        return inicio;
+    return buscarAluPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
+
+}
+
+int removeAluPer(periodo *&per, int id_alu){
+    aluno *atual = buscarAnteriorAlu(per->periodoAlu, id_alu);
+    if(atual == nullptr){
+        if(per->periodoAlu == nullptr) return 0;
+        if(per->periodoAlu->id == id_alu){
+            per->periodoAlu = per->periodoAlu->prox;
+            return 1;
+        }
+    }
+    atual->prox = atual->prox->prox;
+    return 1;
+}
+
 int menuPer()
 {
     int opcao;
@@ -204,12 +226,11 @@ int menuMain()
 
 int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
+    init -> periodoAlu = nullptr;
     // ini->tmp
     // cout << init->ano << "\n";
 
-    
     inserirAluPer(init, 45);
-
     //  inserirMatPer(32,init);
 
     // //Criar mat�ria
