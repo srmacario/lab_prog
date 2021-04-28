@@ -127,6 +127,7 @@ int inserirAluPer(periodo *&per, int id_alu)
         clean_stdin();
         aux->prox = per->periodoAlu;
         per->periodoAlu = aux;
+        aux->listMat = nullptr;
         return 1;
     }
 }
@@ -152,6 +153,7 @@ int inserirMatPer(periodo *&per, int id_mat)
         clean_stdin();
         aux->prox = per->periodoMat;
         per->periodoMat = aux;
+        aux->listAlu = nullptr;
         return 1;
     }
 }
@@ -229,11 +231,80 @@ int removeAluPer(periodo *&per, int id_alu){
     return 1;
 }
 
+
+//Precisa ser testada---------------------------------------------------
+int aluPorMat(periodo *inicio, int id)
+{
+    materia *aux = buscarMatPer(inicio->periodoMat, id);
+    listaAluno *alAtual = nullptr;
+    if(aux == nullptr)
+    {
+        printf("Essa materia nao esta cadastrada neste periodo.\n");
+        return 0;
+    }
+    else
+    {
+        printf("Alunos matriculados:\n");
+        printf("ID\tNome\n");
+        alAtual = aux->listAlu;
+        while(alAtual != nullptr)
+        {
+            printf("%d\t%s\n", alAtual->alu->id, alAtual->alu->nome);
+            alAtual = alAtual->prox;
+        }
+        return 1;
+    }
+}
+
+int inserirAluMat(periodo *per)
+{
+    int id_alu = -1, id_mat = -1;
+    listaAluno *aux_alu = (listaAluno *)malloc(sizeof(listaAluno));
+    listaMateria *aux_mat = (listaMateria *)malloc(sizeof(listaMateria));
+    printf("Digite o ID do aluno a ser matriculado:\n");
+    scanf(" %d", &id_alu);
+    aluno *a = buscarAluPer(per->periodoAlu, id_alu);
+    if(a == nullptr)
+    {
+        printf("Esse aluno nao esta cadastrado neste periodo.\n");
+        return 0;
+    }
+    printf("Digite o ID da materia:\n");
+    scanf(" %d", &id_mat);
+    materia *m = buscarMatPer(per->periodoMat, id_mat);
+    if(m == nullptr)
+    {
+        printf("Essa materia nao esta cadastrada neste periodo.\n");
+        return 0;
+    }
+    if(buscarAluMat(m->listAlu, id_alu) != nullptr)
+    {
+        printf("Este aluno ja esta matriculado\n");
+        return 0;
+    }
+    aux_alu->prox = m->listAlu;
+    m->listAlu = aux_alu;
+    aux_alu->alu = a;
+
+    aux_mat->prox = a->listMat;
+    a->listMat = aux_mat;
+    aux_mat->mat = m;
+
+    return 1;
+}
+
+
+
 int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     init -> periodoAlu = nullptr;
     // ini->tmp
     // cout << init->ano << "\n";
+
+
+    init->periodoAlu = nullptr;
+    init->periodoMat = nullptr;
+
 
     inserirAluPer(init, 45);
     //  inserirMatPer(32,init);
@@ -253,5 +324,21 @@ int main(){
 
     //Cadastras na mat�ria
 
+    //------------------------------------
+
+    init->prox = nullptr;
+    inserirMatPer(init, 1);
+    inserirAluPer(init, 50);
+
+    /*init->periodoMat->listAlu = (listaAluno *)malloc(sizeof(listaAluno));
+    init->periodoMat->listAlu->alu = init->periodoAlu;
+    init->periodoMat->listAlu->prox = (listaAluno *)malloc(sizeof(listaAluno));
+    init->periodoMat->listAlu->prox->alu = init->periodoAlu->prox;
+    init->periodoMat->listAlu->prox->prox = nullptr;*/
+    inserirAluMat(init);
+    inserirAluMat(init);
+
+    aluPorMat(init, 1);
+    //------------------------------------
     free(init);
 }
