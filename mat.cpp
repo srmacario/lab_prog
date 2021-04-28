@@ -184,6 +184,7 @@ int menuMain()
 
     scanf("%d", &opcao);
     return opcao;
+}
 
 int menuPer()
 {
