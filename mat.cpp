@@ -68,9 +68,9 @@ aluno *buscarAluPer(aluno *inicio, int id)
 }
 
 aluno *buscarAnteriorAlu(aluno *inicio, int id){
-    if (inicio == nullptr or inicio->prox == nullptr)
+    if (inicio == nullptr)
         return nullptr;
-    if (inicio->prox->id == id)
+    if(inicio->prox == nullptr or inicio->prox->id == id)
         return inicio;
     return buscarAluPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
 
@@ -216,17 +216,15 @@ int menuPerMat()
 
 int removeAluPer(periodo *&per, int id_alu){
     aluno *atual = buscarAnteriorAlu(per->periodoAlu, id_alu);
-    if(atual == nullptr){
-        if(per->periodoAlu == nullptr){
-            printf("Aluno não está na lista!");
-            return 0;
-        }
+    if(atual == nullptr or atual->prox == nullptr){
         if(per->periodoAlu->id == id_alu){
             per->periodoAlu = per->periodoAlu->prox;
             return 1;
         }
+        printf("Aluno não está na lista!");
+        return 0;
     }
-    atual->prox = atual->prox->prox;
+    atual -> prox = atual->prox->prox;
     return 1;
 }
 
