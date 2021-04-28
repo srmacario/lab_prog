@@ -172,7 +172,10 @@ aluno *buscarAnteriorAlu(aluno *inicio, int id){
 int removeAluPer(periodo *&per, int id_alu){
     aluno *atual = buscarAnteriorAlu(per->periodoAlu, id_alu);
     if(atual == nullptr){
-        if(per->periodoAlu == nullptr) return 0;
+        if(per->periodoAlu == nullptr){
+            printf("Aluno não está na lista!");
+            return 0;
+        }
         if(per->periodoAlu->id == id_alu){
             per->periodoAlu = per->periodoAlu->prox;
             return 1;
