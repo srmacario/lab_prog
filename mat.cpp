@@ -211,6 +211,15 @@ int inserirPer(periodo *&inicio, char aux_ano[10])
         return 1;
     }
 }
+void listarPer(periodo *inicio)
+{
+    printf("Periodos cadastrados:\n");
+    while(inicio != nullptr)
+    {
+        printf("%s\n",inicio->ano);
+        inicio = inicio->prox;
+    }
+}
 
 int aluPorMat(periodo *inicio, int id)
 {
