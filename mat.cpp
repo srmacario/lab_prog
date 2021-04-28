@@ -119,7 +119,7 @@ void dadosAlu(periodo *per, int id_alu)
         return;
     }
 
-    printf("ID\tNome\tCPF\tLista de Materias");
+    printf("ID\tNome\tCPF\tLista de Materias\n");
     printf("%d\t", aux->id);
     printf("%s\t", aux->nome);
     printf("%s\t", aux->cpf);
@@ -206,11 +206,11 @@ int inserirAluPer(periodo *&per, int id_alu)
     {
         aluno *aux = (aluno *)malloc(sizeof(aluno));
         aux->id = id_alu;
-        printf("Digite o nome do aluno: ");
-        scanf("%[^\n]s", aux->nome);
+        printf("Digite o nome do aluno:\n ");
+        scanf(" %[^\n]s", aux->nome);
         clean_stdin();
         printf("Digite o cpf do aluno: ");
-        scanf("%[^\n]s", aux->cpf);
+        scanf(" %[^\n]s", aux->cpf);
         clean_stdin();
         aux->prox = per->periodoAlu;
         per->periodoAlu = aux;
@@ -231,10 +231,10 @@ int inserirMatPer(periodo *&per, int id_mat)
         materia *aux = (materia *)malloc(sizeof(materia));
         aux->id = id_mat;
         printf("Digite o nome do materia:\n");
-        scanf("%[^\n]s", aux->nome);
+        scanf(" %[^\n]s", aux->nome);
         clean_stdin();
         printf("Digite o nome do professor:\n");
-        scanf("%[^\n]s", aux->professor);
+        scanf(" %[^\n]s", aux->professor);
         clean_stdin();
         printf("Digite o numero de creditos da materia:\n");
         scanf(" %d", &aux->cred);
@@ -328,7 +328,7 @@ int menuMain()
     printf("4. Consultar periodo\n");
     printf("0. Sair\n");
 
-    scanf("%d", &opcao);
+    scanf( "%d", &opcao);
     return opcao;
 }
 
@@ -401,7 +401,7 @@ int main()
         case 2:
             printf("Digite o periodo:(ex:2021-1)\n");
             char temp[10];
-            scanf("%[^\n]s", temp);
+            scanf(" %[^\n]s", temp);
             clean_stdin();
             inserirPer(init, temp);
             break;
@@ -409,8 +409,7 @@ int main()
             break; // remover periodo
         case 4:
             printf("Escolha o periodo:\n");
-            char temp[10];
-            scanf("%[^\n]s", temp);
+            scanf(" %[^\n]s", temp);
             clean_stdin();
             periodo *aux_per = buscarPer(init, temp);
             if (aux_per == nullptr)
@@ -445,13 +444,11 @@ int main()
                         break; //remover aluno per
                     case 7:
                         printf("Insira o ID do aluno:\n");
-                        int temp_id_alu;
                         scanf("%d", &temp_id_alu);
                         dadosAlu(init, temp_id_alu);
                         break;
                     case 8:
                         printf("Insira o ID da materia:\n");
-                        int temp_id_mat;
                         scanf("%d", &temp_id_mat);
                         materia *aux = buscarMatPer(init->periodoMat, temp_id_mat);
                         if (aux == nullptr)
