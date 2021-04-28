@@ -164,8 +164,10 @@ int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     // ini->tmp
     // cout << init->ano << "\n";
-    //inserirAluPer(45,init);
-    //cout << (buscarAluPer(init, 45)) -> id << "\n";
+
+    
+    inserirAluPer(init, 45);
+
     //  inserirMatPer(32,init);
 
     // //Criar mat�ria
