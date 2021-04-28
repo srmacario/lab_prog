@@ -48,31 +48,6 @@ struct periodo
     periodo *prox = NULL;
 };
 
-
-//Precisa ser testada---------------------------------------------------
-int aluPorMat(periodo *inicio, int id)
-{
-    materia *aux = buscarMatPer(inicio->periodoMat, id);
-    listaAluno *alAtual = nullptr;
-    if(aux == nullptr)
-    {
-        printf("Essa materia nao esta cadastrada neste periodo.\n");
-        return 0;
-    }
-    else
-    {
-        printf("Alunos matriculados:\n");
-        printf("ID\tNome\n");
-        alAtual = aux->listAlu;
-        while(alAtual != nullptr)
-        {
-            printf("%d\t%s\n", alAtual->alu->id, alAtual->alu->nome);
-            alAtual = alAtual->prox;
-        }
-        return 1;
-    }
-}
-
 listaAluno *buscarAluMat(listaAluno *inicio, int id)
 {
     if (inicio == nullptr)
@@ -237,6 +212,28 @@ int inserirPer(periodo *&inicio, char aux_ano[10])
     }
 }
 
+int aluPorMat(periodo *inicio, int id)
+{
+    materia *aux = buscarMatPer(inicio->periodoMat, id);
+    listaAluno *alAtual = nullptr;
+    if(aux == nullptr)
+    {
+        printf("Essa materia nao esta cadastrada neste periodo.\n");
+        return 0;
+    }
+    else
+    {
+        printf("Alunos matriculados:\n");
+        printf("ID\tNome\n");
+        alAtual = aux->listAlu;
+        while(alAtual != nullptr)
+        {
+            printf("%d\t%s\n", alAtual->alu->id, alAtual->alu->nome);
+            alAtual = alAtual->prox;
+        }
+        return 1;
+    }
+}
 
 int matPorAlu(periodo *inicio, int id)
 {
