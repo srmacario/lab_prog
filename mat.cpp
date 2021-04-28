@@ -8,6 +8,13 @@ struct listaAluno;
 struct listaMateria;
 struct periodo;
 
+void clean_stdin(){
+    int c;
+    do{
+        c = getchar();
+    } while (c != '\n' and c != EOF);
+}
+
 struct aluno
 {
     int id;
@@ -16,6 +23,7 @@ struct aluno
     listaMateria *listMat = NULL;
     aluno *prox = NULL;
 };
+
 struct listaAluno
 {
     listaAluno *prox = NULL;
@@ -49,8 +57,7 @@ materia *buscarMatPer(materia *inicio, int id)
         return NULL;
     if (inicio->id == id)
         return inicio;
-    else
-        return buscarMatPer(inicio->prox, id);
+    return buscarMatPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
 }
 
 aluno *buscarAluPer(aluno *inicio, int id)
@@ -59,8 +66,7 @@ aluno *buscarAluPer(aluno *inicio, int id)
         return nullptr;
     if (inicio->id == id)
         return inicio;
-    else
-        return buscarAluPer(inicio->prox, id);
+    return buscarAluPer(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
 }
 
 listaAluno *buscarAluMat(listaAluno *inicio, int id)
@@ -69,8 +75,7 @@ listaAluno *buscarAluMat(listaAluno *inicio, int id)
         return nullptr;
     if (inicio->alu->id == id)
         return inicio;
-    else
-        return buscarAluMat(inicio->prox, id);
+    return buscarAluMat(inicio->prox, id); //não precisa de else, ja vai cair aqui automatico
 }
 
 listaMateria *buscarMatAlu(listaMateria *inicio, int id)
@@ -79,28 +84,24 @@ listaMateria *buscarMatAlu(listaMateria *inicio, int id)
         return nullptr;
     if (inicio->mat->id == id)
         return inicio;
-    else
-        return buscarMatAlu(inicio->prox, id);
+    return buscarMatAlu(inicio->prox, id); //não precisa de else, ja vai cair aqui automatico
 }
 
 int inserirAluPer(int id_alu, periodo *&per)
 {
-    if (buscarAluPer(per->periodoAlu, id_alu) != nullptr)
-    {
+    if (buscarAluPer(per->periodoAlu, id_alu) != nullptr){
         printf("Aluno ja esta cadastrado\n");
         return 0;
     }
-    else
-    {
-        fflush(stdin);
+    else{
         aluno *aux = (aluno *)malloc(sizeof(aluno));
         aux->id = id_alu;
-        printf("Digite o nome do aluno:\n ");
+        printf("Digite o nome do aluno: ");
         scanf("%[^\n]s",aux->nome);
-        fflush(stdin);
-        printf("Digite o cpf do aluno:\n ");
+        clean_stdin();
+        printf("Digite o cpf do aluno: ");
         scanf("%[^\n]s",aux->cpf);
-        fflush(stdin);
+        clean_stdin();
         aux->prox = per->periodoAlu;
         per->periodoAlu = aux;
         return 1;
@@ -109,33 +110,29 @@ int inserirAluPer(int id_alu, periodo *&per)
 
 int inserirMatPer(int id_mat, periodo *&per)
 {
-    if (buscarMatPer(per->periodoMat, id_mat) != nullptr)
-    {
+    if (buscarMatPer(per->periodoMat, id_mat) != nullptr){
         printf("A materia ja esta cadastrada\n");
         return 0;
     }
-    else
-    {
-        fflush(stdin);
+    else{
         materia *aux = (materia *)malloc(sizeof(materia));
         aux->id = id_mat;
         printf("Digite o nome do materia:\n");
         scanf("%[^\n]s",aux->nome);
-        fflush(stdin);
+        clean_stdin();
         printf("Digite o nome do professor:\n");
         scanf("%[^\n]s",aux->professor);
-        fflush(stdin);
+        clean_stdin();
         printf("Digite o numero de creditos da materia:\n");
         scanf(" %d", &aux->cred);
-        fflush(stdin);
+        clean_stdin();
         aux->prox = per->periodoMat;
         per->periodoMat = aux;
         return 1;
     }
 }
 
-int main()
-{
+int main(){
     periodo *init = (periodo *)malloc(sizeof(periodo));
     // ini->tmp
     // cout << init->ano << "\n";
