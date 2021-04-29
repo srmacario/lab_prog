@@ -518,6 +518,7 @@ int removeAluPer(periodo *&per, int id_alu)
         while(matAtual){
             //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro matAtual->mat
             removeAluMat(matAtual->mat, atual);
+            matAtual = matAtual->prox;
             
         }
         per->periodoAlu = atual->prox;
@@ -535,6 +536,7 @@ int removeAluPer(periodo *&per, int id_alu)
     matAtual = atual->listMat;
     while(matAtual){
         removeAluMat(matAtual->mat, atual);
+        matAtual = matAtual->prox;
     }
     ant->prox = atual->prox;
     free(atual);
@@ -558,6 +560,8 @@ int removeMatPer(periodo *&per, int id_mat){
         while(aluAtual){
             //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro aluAtual->alu
             removeAluMat(atual, aluAtual->alu);
+            aluAtual = aluAtual->prox;
+            
         }
         per -> periodoMat = atual -> prox;
         free(atual);
@@ -573,6 +577,7 @@ int removeMatPer(periodo *&per, int id_mat){
     aluAtual = atual->listAlu;
     while(aluAtual){
         removeAluMat(atual, aluAtual->alu);
+        aluAtual = aluAtual->prox;
     }
     ant -> prox = atual -> prox;
     free(atual);
