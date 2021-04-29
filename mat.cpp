@@ -99,6 +99,16 @@ listaMateria *buscarMatAlu(listaMateria *inicio, int id)
     return buscarMatAlu(inicio->prox, id); //não precisa de else, ja vai cair aqui automatico
 }
 
+listaMateria *buscarAnteriorMatAlu(listaMateria *inicio, int id){
+    //se a lista nao existir ou se quem for removido for o primeiro, retorna null
+    if (inicio == nullptr or inicio->mat->id == id)
+        return nullptr;
+    //se for o ultimo da lista, ou o proximo for o aluno desejado, retorna o ponteiro atual
+    if (inicio->prox == nullptr or inicio->prox->mat->id == id)
+        return inicio;
+    return buscarAnteriorMatAlu(inicio->prox, id); // não precisa de else, ja vai cair aqui automatico
+}
+
 materia *buscarMatPer(materia *inicio, int id)
 {
     if (inicio == NULL)
@@ -407,14 +417,12 @@ int menuPerMat(materia *mat)
     return opcao;
 }
 
-
-int removeAluMat(materia *&mat, int id_alu)
-{
-    listaAluno *ant = buscarAnteriorAluMat(mat->listAlu, id_alu), *atual;
-
+int removeAluMat(materia *&mat, aluno *&alu){
+    //REMOVE ALUNO DA LISTA ALUNO MATERIA
+    listaAluno *aluAnt = buscarAnteriorAluMat(mat->listAlu, alu->id), *aluAtual;
+    
     //atual == nullptr: não existe lista ou preciso remover a head
-    if (ant == nullptr)
-    {
+    if(aluAnt == nullptr){
         //se a head não existir, não faz nada
         if (mat->listAlu == nullptr)
         {
@@ -423,28 +431,55 @@ int removeAluMat(materia *&mat, int id_alu)
             return 0;
         }
         //head existe e quero remove-la, troco
-        atual = mat->listAlu;
-
-        mat->listAlu = atual->prox;
-        free(atual);
+        aluAtual = mat->listAlu;
+        mat->listAlu = aluAtual -> prox;
+        free(aluAtual);
         return 1;
     }
     //atual->prox == nullptr, chegou ao final e não achou
-    else if (ant->prox == nullptr)
-    {
+    else if(aluAnt->prox == nullptr){
         printf("Aluno não está na lista!");
         return 0;
     }
-    //coloca o prox pra amontar para o proximo da lista
-    atual = ant->prox;
-    ant->prox = atual->prox;
-    free(atual->prox);
+    //coloca o prox pra apontar para o proximo da lista
+    aluAtual = aluAnt->prox;
+    aluAnt->prox = aluAtual->prox;
+    free(aluAtual);
+
+    //REMOVE MATERIA DA LISTA MATERIA DO ALUNO
+    listaMateria *matAnt = buscarAnteriorMatAlu(alu->listMat, mat->id), *matAtual;
+    
+    //atual == nullptr: não existe lista ou preciso remover a head
+    if(matAnt == nullptr){
+        //se a head não existir, não faz nada
+        if(alu->listMat == nullptr){
+            printf("Matéria não pertence ao aluno!");
+            return 0; 
+        }
+        //head existe e quero remove-la, troco
+        matAtual = alu->listMat;
+        alu->listMat = matAtual -> prox;
+        free(matAtual);
+        return 1;
+    }
+    //atual->prox == nullptr, chegou ao final e não achou
+    else if(matAnt->prox == nullptr){
+        printf("Aluno não está na lista!");
+        return 0;
+    }
+    //coloca o prox pra apontar para o proximo da lista
+    matAtual = matAnt->prox;
+    matAnt->prox = matAtual->prox;
+    free(matAtual);
+
     return 1;
 }
 
 int removeAluPer(periodo *&per, int id_alu)
 {
     aluno *ant = buscarAnteriorAluPer(per->periodoAlu, id_alu), *atual;
+
+    listaMateria *matAtual, *matAnt;
 
     //atual == nullptr: não existe lista ou preciso remover a head
     if (ant == nullptr)
@@ -457,21 +492,10 @@ int removeAluPer(periodo *&per, int id_alu)
         }
         atual = per->periodoAlu;
         //head existe e quero remove-la, troco
-        //mantendo dois ponteiros, atual e anterior
-        listaMateria *matAtual = atual->listMat, *matAnt = nullptr;
-        while (matAtual != nullptr)
-        {
-            //remote o alu da lista de materia
-            removeAluMat(matAtual->mat, id_alu);
-            //faz o ponteiro que indica o inicio de listMat passar para o proximo
-            atual->listMat = matAtual->prox;
-            //faz o anterior apontar para o proximo, servindo de auxiliar
-            matAnt = matAtual->prox;
-            //libera a materia atual atual
-            free(matAtual);
-            //reatualiza os ponteiros atual e anterior para prosseguir
-            matAtual = matAnt;
-            matAnt = nullptr;
+        matAtual = atual->listMat, matAnt = nullptr;
+        while(matAtual){
+            //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro matAtual->mat
+            removeAluMat(matAtual->mat, atual);
         }
         per->periodoAlu = atual->prox;
         free(atual);
@@ -485,20 +509,9 @@ int removeAluPer(periodo *&per, int id_alu)
     }
     //coloca o prox pra apontar para o proximo da lista
     atual = ant->prox;
-    listaMateria *matAtual = atual->listMat, *matAnt = nullptr;
-    while (matAtual != nullptr)
-    {
-        //remote o alu da lista de materia
-        removeAluMat(matAtual->mat, id_alu);
-        //faz o ponteiro que indica o inicio de listMat passar para o proximo
-        atual->listMat = matAtual->prox;
-        //faz o anterior apontar para o proximo, servindo de auxiliar
-        matAnt = matAtual->prox;
-        //libera a materia atual atual
-        free(matAtual);
-        //reatualiza os ponteiros atual e anterior para prosseguir
-        matAtual = matAnt;
-        matAnt = nullptr;
+    matAtual = atual->listMat, matAnt = nullptr;
+    while(matAtual){
+        removeAluMat(matAtual->mat, atual);
     }
     ant->prox = atual->prox;
     free(atual);
