@@ -577,7 +577,7 @@ int removeMatPer(periodo *&per, int id_mat){
 }
 
 int removePer(periodo *&per, char aux_ano[20]){
-    periodo *ant = buscarAnteriorPer(per->periodoAlu, id_alu), *atual;
+    periodo *ant = buscarAnteriorPer(per, aux_ano), *atual;
 
     //atual == nullptr: não existe lista ou preciso remover a head
     if(ant == nullptr){
@@ -628,6 +628,9 @@ int main()
             inserirPer(init, temp);
             break;
         case 3:
+            printf("Digite o periodo que deseja remover:(ex:2021-1)\n");
+            scanf(" %[^\n]s",temp);
+            removePer(init,temp);
             break; // remover periodo
         case 4:
             printf("Escolha o periodo:\n");
@@ -658,6 +661,9 @@ int main()
                         inserirMatPer(init, temp_id_mat);
                         break;
                     case 4:
+                        printf("Insira o Id da materia que deseja remover:\n");
+                        scanf("%d",temp_id_mat);
+                        removeMatPer(init,temp_id_mat);
                         break; //remover materia per
                     case 5:
                         printf("Insira o ID do aluno:\n");
@@ -701,7 +707,9 @@ int main()
                                 case 4:
                                     printf("Insira o ID do aluno que deseja remover da materia:\n");
                                     scanf("%d", &temp_id_alu);
-                                    removeAluMat(aux, temp_id_alu); //remover
+                                    listaAluno *aux_alu = buscarAluMat(aux->listAlu,temp_id_alu);
+                                    if(aux_alu != nullptr) removeAluMat(aux, aux_alu->alu);// funcao recebe como aluno* como parametro 
+                                    else printf("Esse ID nao está cadastrado\n");           // então preciso procurar aluno* com o id
                                     break;
                                 }
 
