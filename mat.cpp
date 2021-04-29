@@ -206,9 +206,9 @@ void dadosMat(periodo *per, int id_mat)
 }
 
 //nao testado
-int inserirAluMat(periodo *per)
+int inserirAluMat(periodo *per,int id_mat)
 {
-    int id_alu = -1, id_mat = -1;
+    int id_alu = -1;
     listaAluno *aux_alu = (listaAluno *)malloc(sizeof(listaAluno));
     listaMateria *aux_mat = (listaMateria *)malloc(sizeof(listaMateria));
     printf("Digite o ID do aluno a ser matriculado:\n");
@@ -219,8 +219,8 @@ int inserirAluMat(periodo *per)
         printf("Esse aluno nao esta cadastrado neste periodo.\n");
         return 0;
     }
-    printf("Digite o ID da materia:\n");
-    scanf(" %d", &id_mat);
+   /*  printf("Digite o ID da materia:\n");
+    scanf(" %d", &id_mat); */
     materia *m = buscarMatPer(per->periodoMat, id_mat);
     if (m == nullptr)
     {
@@ -321,6 +321,7 @@ void listarAluPer(periodo *inicio)
     while(aux != nullptr)
     {
         printf("%d\t%s\n",aux->id,aux->nome);
+        aux = aux->prox;
     }
 
 }
@@ -332,6 +333,7 @@ void listarMatPer(periodo *inicio)
     while(aux != nullptr)
     {
         printf("%d\t%s\n",aux->id,aux->nome);
+        aux = aux->prox;
     }
 }
 void listarPer(periodo *inicio)
@@ -516,6 +518,7 @@ int removeAluPer(periodo *&per, int id_alu)
         while(matAtual){
             //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro matAtual->mat
             removeAluMat(matAtual->mat, atual);
+            
         }
         per->periodoAlu = atual->prox;
         free(atual);
@@ -662,7 +665,7 @@ int main()
                         break;
                     case 4:
                         printf("Insira o Id da materia que deseja remover:\n");
-                        scanf("%d",temp_id_mat);
+                        scanf("%d",&temp_id_mat);
                         removeMatPer(init,temp_id_mat);
                         break; //remover materia per
                     case 5:
@@ -703,7 +706,8 @@ int main()
                                     aluPorMat(init, temp_id_mat);
                                     break;
                                 case 3:
-                                    inserirAluMat(init);
+                                    inserirAluMat(init,aux->id);
+                                    break;
                                 case 4:
                                     printf("Insira o ID do aluno que deseja remover da materia:\n");
                                     scanf("%d", &temp_id_alu);
