@@ -140,9 +140,11 @@ periodo *buscarPer(periodo *inicio, char aux_ano[20])
 
 periodo *buscarAnteriorPer(periodo *inicio, char aux_ano[20])
 {
-    if (inicio == nullptr or strcmp(inicio->prox->ano, aux_ano) == 0)
+    if (inicio == nullptr or strcmp(inicio->ano, aux_ano) == 0)
+        return nullptr;
+    if (inicio->prox == nullptr)
         return inicio;
-    if (inicio->prox == nullptr or strcmp(inicio->ano, aux_ano) == 0)
+    if (strcmp(inicio->prox->ano, aux_ano) == 0)
         return inicio;
     return buscarAnteriorPer(inicio->prox, aux_ano);
 }
@@ -309,6 +311,8 @@ int inserirPer(periodo *&inicio, char aux_ano[10])
         strcpy(aux->ano, aux_ano);
         aux->prox = inicio;
         inicio = aux;
+        inicio->periodoAlu = nullptr;
+        inicio->periodoMat = nullptr;
         return 1;
     }
 }
@@ -602,7 +606,7 @@ int removePer(periodo *&per, char aux_ano[20]){
     }
     //atual->prox == nullptr, chegou ao final e não achou
     else if(ant->prox == nullptr){
-        printf("Aluno não está na lista!");
+        printf("Período não existe!");
         return 0;
     }
     //coloca o prox pra apontar para o proximo da lista
@@ -614,12 +618,10 @@ int removePer(periodo *&per, char aux_ano[20]){
 
 int main()
 {
-    periodo *init = (periodo *)malloc(sizeof(periodo));
-    init->periodoAlu = nullptr;
-    init->periodoMat = nullptr;
+    periodo *init = nullptr;
 
     int opcaoMain = -1;
-
+    cout << init << "\n";
     do
     {
         opcaoMain = menuMain();
