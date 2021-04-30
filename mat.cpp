@@ -468,6 +468,24 @@ void makeFileMat(periodo *per)
     }
 }
 
+void makeFilePer(periodo *per)
+{
+    char url[20] = "periodos.txt";
+    FILE *arq;
+    arq = fopen(url, "w");
+    if (arq == nullptr)
+        printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while (per != nullptr)
+        {
+            fprintf(arq, "%s\n", per->ano);
+            per = per->prox;
+        }
+        fclose(arq);
+    }
+}
+
 int matPorAlu(periodo *inicio, int id)
 {
     aluno *aux = buscarAluPer(inicio->periodoAlu, id);
