@@ -912,13 +912,6 @@ int main()
 
             break; // remover periodo
         case 4:
-            printf("Escolha o periodo:\n");
-            scanf(" %9[^\n]s", temp);
-            clean_stdin();
-            periodo *aux_per = buscarPer(init, temp);
-            if (aux_per == nullptr)
-                printf("O periodo nao esta cadastrado\n");
-            else
             {
                 printf("Escolha o periodo:\n");
                 scanf(" %9[^\n]s", temp);
