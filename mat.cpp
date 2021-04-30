@@ -385,6 +385,7 @@ void makeFileAlu(periodo *per)
     {
         while(aux != nullptr)
         {
+            fprintf(arq,"%s\n",per->ano);
             fprintf(arq,"%d\n",aux->id);
             fprintf(arq,"%s\n",aux->nome);
             fprintf(arq,"%s\n",aux->cpf);
