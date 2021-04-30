@@ -599,7 +599,7 @@ void readFileAlu(periodo *&per)
         while((fscanf(arq," %[^\n]s",ano))!= EOF)
         {
             per = buscarPer(per,ano);
-            fscanf(arq," %d",id);
+            fscanf(arq," %d",&id);
             fscanf(arq,"%[^\n]s",nome);
             clean_stdin();
             fscanf(arq," %[^\n]s",cpf);
@@ -635,10 +635,10 @@ void readFileMat(periodo *&per)
         while((fscanf(arq," %[^\n]s",ano))!= EOF)
         {
             per = buscarPer(per,ano);
-            fscanf(arq," %d",id);
+            fscanf(arq," %d",&id);
             fscanf(arq," %[^\n]s",nome);
             fscanf(arq," %[^\n]s",prof);
-            fscanf(arq," %d",cred);
+            fscanf(arq," %d",&cred);
             materia *aux = (materia*)malloc(sizeof(materia));
             aux->prox = nullptr;
             aux->id = id;
