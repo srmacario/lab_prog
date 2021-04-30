@@ -467,7 +467,6 @@ void makeFileMat(periodo *per)
         fclose(arq);
     }
 }
-
 void makeFilePer(periodo *per)
 {
     char url[20] = "periodos.txt";
@@ -480,6 +479,34 @@ void makeFilePer(periodo *per)
         while (per != nullptr)
         {
             fprintf(arq, "%s\n", per->ano);
+
+            per = per->prox;
+        }
+        fclose(arq);
+    }
+}
+void makeFileAluMat(periodo *per)
+{
+    char url[20] = "alunosmaterias.txt";
+    FILE *arq;
+    arq = fopen(url, "w");
+    if (arq == nullptr)
+        printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while (per != nullptr)
+        {
+            materia* mat = per->periodoMat;
+            while(mat != nullptr){
+                listaAluno* lista = mat->listAlu;
+                while(lista != nullptr){
+                    fprintf(arq, "%s\n", per->ano);
+                    fprintf(arq, "%d\n", mat->id);
+                    fprintf(arq, "%d\n", lista->alu->id);
+                    lista = lista->prox;
+                }
+                mat = mat->prox;
+            }
             per = per->prox;
         }
         fclose(arq);
