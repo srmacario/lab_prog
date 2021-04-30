@@ -909,8 +909,13 @@ int main()
             scanf(" %9[^\n]s",temp);
             clean_stdin();
             removePer(init,temp);
-
             break; // remover periodo
+        case 5:
+            makeFilePer(init);
+            makeFileMat(init);
+            makeFileAlu(init);
+            makeFileAluMat(init);
+            break;
         case 4:
             printf("Escolha o periodo:\n");
             scanf(" %9[^\n]s", temp);
@@ -1031,12 +1036,7 @@ int main()
                 }
                 break;
             }
-        case 5:
-            makeFilePer(init);
-            makeFileMat(init);
-            makeFileAlu(init);
-            makeFileAluMat(init);
-            break;
+        
         }
 
     } while (opcaoMain);
