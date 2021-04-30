@@ -170,7 +170,7 @@ void dadosAlu(periodo *per, int id_alu)
 
     printf("ID\tNome\tCPF\t\tLista de Materias\n");
 
-    printf("%d\t", aux->id);
+    printf("%.5d\t", aux->id);
     printf("%s\t", aux->nome);
     printf("%s\t", aux->cpf);
     listaMateria *aux_listaMateria;
@@ -193,8 +193,8 @@ void dadosMat(periodo *per, int id_mat)
         return;
     }
     printf("ID\tCreditos\tNome\tProfessor\tLista de alunos\n");
-    printf("%d\t", aux->id);
-    printf("%d\t", aux->cred);
+    printf("%.4d\t", aux->id);
+    printf("%d\t\t", aux->cred);
     printf("%s\t", aux->nome);
     printf("%s\t", aux->professor);
     listaAluno *aux_listaAluno;
@@ -366,7 +366,7 @@ void listarAluPer(periodo *inicio)
     printf("ID\tNome do aluno\n");
     while (aux != nullptr)
     {
-        printf("%d\t%s\n", aux->id, aux->nome);
+        printf("%.5d\t%s\n", aux->id, aux->nome);
         aux = aux->prox;
     }
 }
@@ -377,7 +377,7 @@ void listarMatPer(periodo *inicio)
     printf("ID\tNome da materia\n");
     while (aux != nullptr)
     {
-        printf("%d\t%s\n", aux->id, aux->nome);
+        printf("%.4d\t%s\n", aux->id, aux->nome);
         aux = aux->prox;
     }
 }
@@ -407,7 +407,7 @@ int aluPorMat(periodo *inicio, int id)
         alAtual = aux->listAlu;
         while (alAtual != nullptr)
         {
-            printf("%d\t%s\n", alAtual->alu->id, alAtual->alu->nome);
+            printf("%.5d\t%s\n", alAtual->alu->id, alAtual->alu->nome);
             alAtual = alAtual->prox;
         }
         return 1;
@@ -535,7 +535,7 @@ int matPorAlu(periodo *inicio, int id)
 int menuMain()
 {
     int opcao;
-    printf("Escolha a opcao:\n");
+    printf("\nEscolha a opcao:\n");
     printf("1. Listar peridos cadastrados\n");
     printf("2. Inserir periodo\n");
     printf("3. Remover periodo\n");
@@ -561,7 +561,6 @@ int menuPer(periodo *per)
     printf("7. Consultar dados de um aluno\n");
     printf("8. Entrar no menu de uma materia\n");
     printf("0. Sair\n");
-
     scanf("%d", &opcao);
     return opcao;
 }
@@ -576,7 +575,6 @@ int menuPerMat(materia *mat)
     printf("3. Matricular aluno\n");
     printf("4. Remover aluno\n");
     printf("0. Sair\n");
-
     scanf("%d", &opcao);
     return opcao;
 }
@@ -609,7 +607,6 @@ void readFileAlu(periodo *&per)
             aux->prox = per->periodoAlu;
             per->periodoAlu = aux;
             aux->listMat = nullptr;
-
         }
         fclose(arq);
     }
@@ -650,6 +647,38 @@ void readFileMat(periodo *&per)
     }
 }
 
+void readFileMatricula(periodo *&init)
+{
+    char url[20] = "alunosmaterias.txt";
+    periodo *per = nullptr;
+    FILE *arq;
+    char ano[10];
+    int id_mat, id_alu;
+    arq = fopen(url,"r");
+    if(arq == nullptr)
+        printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while((fscanf(arq," %[^\n]s",ano))!= EOF)
+        {
+            per = buscarPer(init,ano);
+            fscanf(arq," %d",&id_mat);
+            fscanf(arq," %d",&id_alu);
+            materia *mat = buscarMatPer(per->periodoMat, id_mat);
+            aluno *alu = buscarAluPer(per->periodoAlu, id_alu);
+            listaAluno *aux_alu = (listaAluno *)malloc(sizeof(listaAluno));
+            listaMateria *aux_mat = (listaMateria *)malloc(sizeof(listaMateria));
+            aux_alu->alu = alu;
+            aux_mat->mat = mat;
+            aux_alu->prox = mat->listAlu;
+            aux_mat->prox = alu->listMat;
+            alu->listMat = aux_mat;
+            mat->listAlu = aux_alu;
+        }
+        fclose(arq);
+    }
+}
+
 void readFilePer(periodo *&inicio)
 {
     char url[20] = "periodos.txt";
@@ -665,7 +694,6 @@ void readFilePer(periodo *&inicio)
             inserirPer(inicio,ano);
         }
         fclose(arq);
-
     }
 }
 
@@ -878,13 +906,14 @@ int main()
 {
     int n = 0;
     periodo *init = nullptr;
-    printf("Voce deseja recuperar os dados de uma sessão anterior?\n1. Sim\n0. Nao\n");
-    scanf("%d", &n);
-    if(n)
+    printf("Voce deseja recuperar os dados de uma sessao anterior?\n1. Sim\n0. Nao\n");
+    scanf(" %d", &n);
+    if(n == 1)
     {
         readFilePer(init);
         readFileMat(init);
         readFileAlu(init);
+        readFileMatricula(init);
     }
     int opcaoMain = -1;
     do
@@ -909,10 +938,15 @@ int main()
             removePer(init,temp);
             break; // remover periodo
         case 5:
-            makeFilePer(init);
-            makeFileMat(init);
-            makeFileAlu(init);
-            makeFileAluMat(init);
+            printf("Ao salvar esta sessao, os dados da sessao anterior serao substituidos. Deseja Prosseguir?\n1. Sim\n0. Nao\n");
+            scanf(" %d", &n);
+            if(n == 1)
+            {
+                makeFilePer(init);
+                makeFileMat(init);
+                makeFileAlu(init);
+                makeFileAluMat(init);
+            }
             break;
         case 4:
             {
@@ -951,7 +985,6 @@ int main()
                                 printf("ID invalido.\n");
                             else
                                 removeMatPer(init,temp_id_mat);
-
                             break; //remover materia per
                         case 5:
                             printf("Escolha o ID que deseja associar a este aluno:(numero natural de no maximo 5 digitos)\n");
@@ -1015,21 +1048,15 @@ int main()
                                             else printf("Esse ID nao esta cadastrado\n");           // então preciso procurar aluno* com o id
                                             break;
                                         }
-
                                      } while (opcaoPerMat);
                                 }
-
                             }
-
                         }
-
                     } while (opcaoPer);
                 }
                 break;
             }
-        
         }
-
     } while (opcaoMain);
     delPer(init);
 }
