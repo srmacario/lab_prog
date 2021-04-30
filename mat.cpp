@@ -1,5 +1,6 @@
 
 #include <bits/stdc++.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -371,6 +372,27 @@ int aluPorMat(periodo *inicio, int id)
         }
         return 1;
     }
+}
+void makeFileAlu(periodo *per)
+{
+    char url[20] = "aluno.txt";
+    FILE *arq;
+    aluno *aux = per->periodoAlu;
+    arq = fopen(url,"w");
+    if(arq == nullptr)
+            printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while(aux != nullptr)
+        {
+            fprintf(arq,"%d\n",aux->id);
+            fprintf(arq,"%s\n",aux->nome);
+            fprintf(arq,"%s\n",aux->cpf);
+            aux = aux->prox;
+        }
+        fclose(arq);
+    }
+
 }
 
 int matPorAlu(periodo *inicio, int id)
