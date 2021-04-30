@@ -583,6 +583,93 @@ int menuPerMat(materia *mat)
     scanf("%d", &opcao);
     return opcao;
 }
+void readFileAlu(periodo *&per)
+{
+    char url[20] = "alunos.txt";
+    FILE *arq;
+    char ano[10];
+    int id;
+    char cpf[20];
+    char nome[50];
+    arq = fopen(url,"r");
+    if(arq == nullptr)
+        printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while((fscanf(arq," %[^\n]s",ano))!= EOF)
+        {
+            per = buscarPer(per,ano);
+            fscanf(arq," %d",id);
+            fscanf(arq,"%[^\n]s",nome);
+            clean_stdin();
+            fscanf(arq," %[^\n]s",cpf);
+            clean_stdin();
+            aluno *aux = (aluno*) malloc(sizeof(aluno));
+            aux->prox = nullptr;
+            aux->id = id;
+            strcpy(aux->nome,nome);
+            strcpy(aux->cpf,cpf);
+            aux->prox = per->periodoAlu;
+            per->periodoAlu = aux;
+            aux->listMat = nullptr;
+           
+        }
+        fclose(arq);
+    }
+}
+
+void readFileMat(periodo *&per)
+{
+    char url[20] = "alunosmaterias.txt";
+    FILE *arq;
+    char ano[10];
+    int id;
+    char nome[50];
+    char prof[50];
+    int cred;
+    arq = fopen(url,"r");
+    if(arq == nullptr) 
+        printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while((fscanf(arq," %[^\n]s",ano))!= EOF)
+        {
+            per = buscarPer(per,ano);
+            fscanf(arq," %d",id);
+            fscanf(arq," %[^\n]s",nome);
+            fscanf(arq," %[^\n]s",prof);
+            fscanf(arq," %d",cred);
+            materia *aux = (materia*)malloc(sizeof(materia));
+            aux->prox = nullptr;
+            aux->id = id;
+            strcpy(aux->nome,nome);
+            strcpy(aux->professor,prof);
+            aux->cred = cred;
+            aux->prox = per->periodoMat;
+            per->periodoMat = aux;
+        }
+        fclose(arq);
+    }
+}
+
+void readFilePer(periodo *&inicio)
+{
+    char url[20] = "periodos.txt";
+    FILE *arq;
+    char ano[10];
+    arq = fopen(url,"r");
+    if(arq == nullptr)
+        printf("Erro ao abrir arquivo\n");
+    else
+    {
+        while((fscanf(arq," %[^\n]s",ano)) != EOF)
+        {
+            inserirPer(inicio,ano);
+        }
+        fclose(arq);
+
+    }
+}
 
 int removeAluMat(materia *&mat, aluno *&alu)
 {
