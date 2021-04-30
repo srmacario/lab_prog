@@ -168,11 +168,11 @@ void dadosAlu(periodo *per, int id_alu)
         return;
     }
 
-    printf("ID\tNome\tCPF\t\tLista de Materias\n");
+    printf("ID\tNome\t\t\t\t\tCPF\t\t\tLista de Materias\n");
 
     printf("%.5d\t", aux->id);
-    printf("%s\t", aux->nome);
-    printf("%s\t", aux->cpf);
+    printf("%s\r\t\t\t\t\t\t", aux->nome);
+    printf("%s\t\t", aux->cpf);
     listaMateria *aux_listaMateria;
     aux_listaMateria = aux->listMat;
     while (aux_listaMateria != nullptr)
@@ -192,11 +192,11 @@ void dadosMat(periodo *per, int id_mat)
         printf("A materia com este ID nao esta cadastrada.\n");
         return;
     }
-    printf("ID\tCreditos\tNome\t\t\tProfessor\t\t\tLista de alunos\n");
+    printf("ID\tCreditos\tNome\t\t\t\t\tProfessor\t\t\t\t\tLista de alunos\n");
     printf("%.4d\t", aux->id);
     printf("%d\t\t", aux->cred);
-    printf("%s\t\t\t", aux->nome);
-    printf("%s\t\t\t", aux->professor);
+    printf("%s\r\t\t\t\t\t\t\t\t", aux->nome);
+    printf("%s\r\t\t\t\t\t\t\t\t\t\t\t\t\t\t", aux->professor);
     listaAluno *aux_listaAluno;
     aux_listaAluno = aux->listAlu;
     while (aux_listaAluno != nullptr)
