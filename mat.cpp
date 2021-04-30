@@ -647,6 +647,7 @@ void readFileMat(periodo *&per)
             aux->cred = cred;
             aux->prox = per->periodoMat;
             per->periodoMat = aux;
+            aux->listAlu = nullptr;
         }
         fclose(arq);
     }
