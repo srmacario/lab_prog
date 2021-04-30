@@ -620,7 +620,7 @@ void readFileAlu(periodo *&per)
 
 void readFileMat(periodo *&per)
 {
-    char url[20] = "alunosmaterias.txt";
+    char url[20] = "materias.txt";
     FILE *arq;
     char ano[10];
     int id;
