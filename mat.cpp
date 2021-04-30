@@ -460,8 +460,8 @@ int removeAluMat(materia *&mat, aluno *&alu){
         //head existe e quero remove-la, troco
         aluAtual = mat->listAlu;
         mat->listAlu = aluAtual -> prox;
-        free(aluAtual);
-        return 1;
+        // free(aluAtual);
+        // return 1;
     }
     //atual->prox == nullptr, chegou ao final e não achou
     else if(aluAnt->prox == nullptr){
@@ -469,9 +469,11 @@ int removeAluMat(materia *&mat, aluno *&alu){
         return 0;
     }
     //coloca o prox pra apontar para o proximo da lista
-    aluAtual = aluAnt->prox;
-    aluAnt->prox = aluAtual->prox;
-    free(aluAtual);
+    else{
+        aluAtual = aluAnt->prox;
+        aluAnt->prox = aluAtual->prox;
+        // free(aluAtual);
+    }
 
     //REMOVE MATERIA DA LISTA MATERIA DO ALUNO
     listaMateria *matAnt = buscarAnteriorMatAlu(alu->listMat, mat->id), *matAtual;
@@ -486,6 +488,7 @@ int removeAluMat(materia *&mat, aluno *&alu){
         //head existe e quero remove-la, troco
         matAtual = alu->listMat;
         alu->listMat = matAtual -> prox;
+        free(aluAtual);
         free(matAtual);
         return 1;
     }
@@ -498,7 +501,7 @@ int removeAluMat(materia *&mat, aluno *&alu){
     matAtual = matAnt->prox;
     matAnt->prox = matAtual->prox;
     free(matAtual);
-
+    free(aluAtual);
     return 1;
 }
 
