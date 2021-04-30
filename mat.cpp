@@ -469,7 +469,7 @@ void makeFileMat(periodo *per)
 }
 void makeFilePer(periodo *per)
 {
-    char url[20] = "alunosmaterias.txt";
+    char url[20] = "periodos.txt";
     FILE *arq;
     arq = fopen(url, "w");
     if (arq == nullptr)
@@ -485,8 +485,9 @@ void makeFilePer(periodo *per)
         fclose(arq);
     }
 }
-void makeFileAluMat(periodo *per){
-    char url[20] = "periodos.txt";
+void makeFileAluMat(periodo *per)
+{
+    char url[20] = "alunosmaterias.txt";
     FILE *arq;
     arq = fopen(url, "w");
     if (arq == nullptr)
