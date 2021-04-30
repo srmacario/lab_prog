@@ -207,7 +207,28 @@ void dadosMat(periodo *per, int id_mat)
     return;
 }
 
-//nao testado
+int delAlu(periodo *per)
+{
+    if(per->periodoAlu == nullptr) return 1;
+    aluno *aux = per->periodoAlu->prox;
+    free(per->periodoAlu);
+    per->periodoAlu = aux;
+    delAlu(per);
+    return 1;
+
+}
+
+int delMat(periodo *per)
+{
+    if(per->periodoMat == nullptr) return 1;
+    materia *aux = per->periodoMat->prox;
+    free(per->periodoMat);
+    per->periodoMat = aux;
+    delMat(per);
+    return 1;
+
+}
+
 int inserirAluMat(periodo *per,int id_mat)
 {
     int id_alu = -1;
@@ -447,7 +468,7 @@ int menuPerMat(materia *mat)
 int removeAluMat(materia *&mat, aluno *&alu){
     //REMOVE ALUNO DA LISTA ALUNO MATERIA
     listaAluno *aluAnt = buscarAnteriorAluMat(mat->listAlu, alu->id), *aluAtual;
-    
+
     //atual == nullptr: não existe lista ou preciso remover a head
     if(aluAnt == nullptr){
         //se a head não existir, não faz nada
@@ -477,13 +498,13 @@ int removeAluMat(materia *&mat, aluno *&alu){
 
     //REMOVE MATERIA DA LISTA MATERIA DO ALUNO
     listaMateria *matAnt = buscarAnteriorMatAlu(alu->listMat, mat->id), *matAtual;
-    
+
     //atual == nullptr: não existe lista ou preciso remover a head
     if(matAnt == nullptr){
         //se a head não existir, não faz nada
         if(alu->listMat == nullptr){
             printf("Matéria não pertence ao aluno!");
-            return 0; 
+            return 0;
         }
         //head existe e quero remove-la, troco
         matAtual = alu->listMat;
@@ -526,7 +547,7 @@ int removeAluPer(periodo *&per, int id_alu)
             //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro matAtual->mat
             removeAluMat(matAtual->mat, atual);
             matAtual = matAtual->prox;
-            
+
         }
         per->periodoAlu = atual->prox;
         free(atual);
@@ -559,7 +580,7 @@ int removeMatPer(periodo *&per, int id_mat){
         //se a head não existir, não faz nada
         if(per->periodoMat == nullptr){
             printf("Matéria não está na lista!");
-            return 0; 
+            return 0;
         }
         atual = per -> periodoMat;
         //head existe e quero remove-la, troco
@@ -568,7 +589,7 @@ int removeMatPer(periodo *&per, int id_mat){
             //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro aluAtual->alu
             removeAluMat(atual, aluAtual->alu);
             aluAtual = aluAtual->prox;
-            
+
         }
         per -> periodoMat = atual -> prox;
         free(atual);
@@ -599,11 +620,13 @@ int removePer(periodo *&per, char aux_ano[20]){
         //se a head não existir, não faz nada
         if(per == nullptr){
             printf("Período não existe!");
-            return 0; 
+            return 0;
         }
         atual = per;
         //head existe e quero remove-la, troco
         per = atual -> prox;
+        delAlu(atual);
+        delMat(atual);
         free(atual);
         return 1;
     }
@@ -615,6 +638,8 @@ int removePer(periodo *&per, char aux_ano[20]){
     //coloca o prox pra apontar para o proximo da lista
     atual = ant->prox;
     ant -> prox = atual -> prox;
+    delAlu(atual);
+    delMat(atual);
     free(atual);
     return 1;
 }
@@ -688,7 +713,7 @@ int main()
                         printf("Insira o ID do aluno que deseja remover do periodo:\n");
                         scanf("%d", &temp_id_alu);
                         removeAluPer(init, temp_id_alu);
-                        break; 
+                        break;
                     case 7:
                         printf("Insira o ID do aluno:\n");
                         scanf("%d", &temp_id_alu);
@@ -722,7 +747,7 @@ int main()
                                     printf("Insira o ID do aluno que deseja remover da materia:\n");
                                     scanf("%d", &temp_id_alu);
                                     listaAluno *aux_alu = buscarAluMat(aux->listAlu,temp_id_alu);
-                                    if(aux_alu != nullptr) removeAluMat(aux, aux_alu->alu);// funcao recebe como aluno* como parametro 
+                                    if(aux_alu != nullptr) removeAluMat(aux, aux_alu->alu);// funcao recebe como aluno* como parametro
                                     else printf("Esse ID nao está cadastrado\n");           // então preciso procurar aluno* com o id
                                     break;
                                 }
