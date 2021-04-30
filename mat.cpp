@@ -192,11 +192,11 @@ void dadosMat(periodo *per, int id_mat)
         printf("A materia com este ID nao esta cadastrada.\n");
         return;
     }
-    printf("ID\tCreditos\tNome\tProfessor\tLista de alunos\n");
+    printf("ID\tCreditos\tNome\t\t\tProfessor\t\t\tLista de alunos\n");
     printf("%.4d\t", aux->id);
     printf("%d\t\t", aux->cred);
-    printf("%s\t", aux->nome);
-    printf("%s\t", aux->professor);
+    printf("%s\t\t\t", aux->nome);
+    printf("%s\t\t\t", aux->professor);
     listaAluno *aux_listaAluno;
     aux_listaAluno = aux->listAlu;
     while (aux_listaAluno != nullptr)
