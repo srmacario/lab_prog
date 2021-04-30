@@ -208,8 +208,29 @@ void dadosMat(periodo *per, int id_mat)
     return;
 }
 
-//nao testado
-int inserirAluMat(periodo *per, int id_mat)
+int delAlu(periodo *per)
+{
+    if(per->periodoAlu == nullptr) return 1;
+    aluno *aux = per->periodoAlu->prox;
+    free(per->periodoAlu);
+    per->periodoAlu = aux;
+    delAlu(per);
+    return 1;
+
+}
+
+int delMat(periodo *per)
+{
+    if(per->periodoMat == nullptr) return 1;
+    materia *aux = per->periodoMat->prox;
+    free(per->periodoMat);
+    per->periodoMat = aux;
+    delMat(per);
+    return 1;
+
+}
+
+int inserirAluMat(periodo *per,int id_mat)
 {
     int id_alu = -1;
     listaAluno *aux_alu = (listaAluno *)malloc(sizeof(listaAluno));
@@ -672,7 +693,10 @@ int removePer(periodo *&per, char aux_ano[20])
         }
         atual = per;
         //head existe e quero remove-la, troco
-        per = atual->prox;
+
+        per = atual -> prox;
+        delAlu(atual);
+        delMat(atual);
         free(atual);
         return 1;
     }
@@ -684,7 +708,9 @@ int removePer(periodo *&per, char aux_ano[20])
     }
     //coloca o prox pra apontar para o proximo da lista
     atual = ant->prox;
-    ant->prox = atual->prox;
+    ant -> prox = atual -> prox;
+    delAlu(atual);
+    delMat(atual);
     free(atual);
     return 1;
 }
