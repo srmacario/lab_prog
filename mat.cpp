@@ -417,7 +417,6 @@ void makeFileAlu(periodo *per)
 {
     char url[20] = "alunos.txt";
     FILE *arq;
-
     arq = fopen(url, "w");
     if (arq == nullptr)
         printf("Erro ao abrir arquivo\n");
@@ -425,7 +424,6 @@ void makeFileAlu(periodo *per)
     {
         while (per != nullptr)
         {
-
             aluno *aux = per->periodoAlu;
             while (aux != nullptr)
             {
@@ -444,7 +442,6 @@ void makeFileMat(periodo *per)
 {
     char url[20] = "materias.txt";
     FILE *arq;
-
     arq = fopen(url,"w");
     if(arq == nullptr) printf("Erro ao abrir arquivo\n");
     else
@@ -915,6 +912,13 @@ int main()
 
             break; // remover periodo
         case 4:
+            printf("Escolha o periodo:\n");
+            scanf(" %9[^\n]s", temp);
+            clean_stdin();
+            periodo *aux_per = buscarPer(init, temp);
+            if (aux_per == nullptr)
+                printf("O periodo nao esta cadastrado\n");
+            else
             {
                 printf("Escolha o periodo:\n");
                 scanf(" %9[^\n]s", temp);
@@ -927,7 +931,6 @@ int main()
                     int opcaoPer = -1;
                     do
                     {
-
                         opcaoPer = menuPer(aux_per);
                         switch (opcaoPer)
                         {
