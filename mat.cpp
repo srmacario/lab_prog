@@ -596,12 +596,10 @@ void readFileAlu(periodo *&per)
     {
         while((fscanf(arq," %[^\n]s",ano))!= EOF)
         {
-            printf("%s\n\n", ano);
             per = buscarPer(per,ano);
             fscanf(arq," %d",&id);
             fscanf(arq," %[^\n]s", nome);
             fscanf(arq," %[^\n]s", cpf);
-            printf("%s\n\n", cpf);
             aluno *aux = (aluno*) malloc(sizeof(aluno));
             aux->prox = nullptr;
             aux->listMat = nullptr;
