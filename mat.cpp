@@ -1,6 +1,8 @@
 
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 using namespace std;
 
@@ -206,28 +208,6 @@ void dadosMat(periodo *per, int id_mat)
     }
     printf("\n");
     return;
-}
-
-int delAlu(periodo *per)
-{
-    if (per->periodoAlu == nullptr)
-        return 1;
-    aluno *aux = per->periodoAlu->prox;
-    free(per->periodoAlu);
-    per->periodoAlu = aux;
-    delAlu(per);
-    return 1;
-}
-
-int delMat(periodo *per)
-{
-    if (per->periodoMat == nullptr)
-        return 1;
-    materia *aux = per->periodoMat->prox;
-    free(per->periodoMat);
-    per->periodoMat = aux;
-    delMat(per);
-    return 1;
 }
 
 int inserirAluMat(periodo *per, int id_mat)
@@ -862,6 +842,28 @@ int removeMatPer(periodo *&per, int id_mat)
     }
     ant->prox = atual->prox;
     free(atual);
+    return 1;
+}
+
+int delAlu(periodo *per)
+{
+    if (per->periodoAlu == nullptr)
+        return 1;
+    aluno *aux = per->periodoAlu->prox;
+    removeAluPer(per, per->periodoAlu->id);
+    per->periodoAlu = aux;
+    delAlu(per);
+    return 1;
+}
+
+int delMat(periodo *per)
+{
+    if (per->periodoMat == nullptr)
+        return 1;
+    materia *aux = per->periodoMat->prox;
+    removeMatPer(per, per->periodoMat->id);
+    per->periodoMat = aux;
+    delMat(per);
     return 1;
 }
 
