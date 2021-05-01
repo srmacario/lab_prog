@@ -210,18 +210,19 @@ void dadosMat(periodo *per, int id_mat)
 
 int delAlu(periodo *per)
 {
-    if(per->periodoAlu == nullptr) return 1;
+    if (per->periodoAlu == nullptr)
+        return 1;
     aluno *aux = per->periodoAlu->prox;
     free(per->periodoAlu);
     per->periodoAlu = aux;
     delAlu(per);
     return 1;
-
 }
 
 int delMat(periodo *per)
 {
-    if(per->periodoMat == nullptr) return 1;
+    if (per->periodoMat == nullptr)
+        return 1;
     materia *aux = per->periodoMat->prox;
     free(per->periodoMat);
     per->periodoMat = aux;
@@ -229,14 +230,14 @@ int delMat(periodo *per)
     return 1;
 }
 
-int inserirAluMat(periodo *per,int id_mat)
+int inserirAluMat(periodo *per, int id_mat)
 {
     int id_alu = -1;
     listaAluno *aux_alu = (listaAluno *)malloc(sizeof(listaAluno));
     listaMateria *aux_mat = (listaMateria *)malloc(sizeof(listaMateria));
     printf("Digite o ID do aluno a ser matriculado:\n");
     scanf(" %d", &id_alu);
-    if(id_alu<0 || id_alu>99999)
+    if (id_alu < 0 || id_alu > 99999)
     {
         printf("ID invalido.\n");
         return 0;
@@ -273,7 +274,7 @@ int inserirAluMat(periodo *per,int id_mat)
 
 int inserirAluPer(periodo *&per, int id_alu)
 {
-    if(id_alu<0 || id_alu>99999)
+    if (id_alu < 0 || id_alu > 99999)
     {
         printf("ID invalido.\n");
         return 0;
@@ -303,7 +304,7 @@ int inserirAluPer(periodo *&per, int id_alu)
 
 int inserirMatPer(periodo *&per, int id_mat)
 {
-    if(id_mat<0 || id_mat>9999)
+    if (id_mat < 0 || id_mat > 9999)
     {
         printf("ID invalido.\n");
         return 0;
@@ -327,7 +328,7 @@ int inserirMatPer(periodo *&per, int id_mat)
         printf("Digite o numero de creditos necessarios para a materia:(valor inteiro entre 0 e 10)\n");
         scanf(" %d", &aux->cred);
         clean_stdin();
-        if(aux->cred<0 || aux->cred>10)
+        if (aux->cred < 0 || aux->cred > 10)
         {
             printf("Valor de creditos invalido.\n");
             free(aux);
@@ -435,27 +436,28 @@ void makeFileAlu(periodo *per)
             }
             per = per->prox;
         }
-            fclose(arq);
+        fclose(arq);
     }
 }
 void makeFileMat(periodo *per)
 {
     char url[20] = "materias.txt";
     FILE *arq;
-    arq = fopen(url,"w");
-    if(arq == nullptr) printf("Erro ao abrir arquivo\n");
+    arq = fopen(url, "w");
+    if (arq == nullptr)
+        printf("Erro ao abrir arquivo\n");
     else
     {
-        while(per != nullptr)
+        while (per != nullptr)
         {
             materia *aux = per->periodoMat;
-            while(aux != nullptr)
+            while (aux != nullptr)
             {
-                fprintf(arq,"%s\n",per->ano);
-                fprintf(arq,"%d\n",aux->id);
-                fprintf(arq,"%s\n",aux->nome);
-                fprintf(arq,"%s\n",aux->professor);
-                fprintf(arq,"%d\n",aux->cred);
+                fprintf(arq, "%s\n", per->ano);
+                fprintf(arq, "%d\n", aux->id);
+                fprintf(arq, "%s\n", aux->nome);
+                fprintf(arq, "%s\n", aux->professor);
+                fprintf(arq, "%d\n", aux->cred);
                 aux = aux->prox;
             }
             per = per->prox;
@@ -492,10 +494,12 @@ void makeFileAluMat(periodo *per)
     {
         while (per != nullptr)
         {
-            materia* mat = per->periodoMat;
-            while(mat != nullptr){
-                listaAluno* lista = mat->listAlu;
-                while(lista != nullptr){
+            materia *mat = per->periodoMat;
+            while (mat != nullptr)
+            {
+                listaAluno *lista = mat->listAlu;
+                while (lista != nullptr)
+                {
                     fprintf(arq, "%s\n", per->ano);
                     fprintf(arq, "%d\n", mat->id);
                     fprintf(arq, "%d\n", lista->alu->id);
@@ -579,7 +583,7 @@ int menuPerMat(materia *mat)
     return opcao;
 }
 
-void readFileAlu(periodo *&per)
+void readFileAlu(periodo *&init)
 {
     char url[20] = "alunos.txt";
     FILE *arq;
@@ -587,23 +591,23 @@ void readFileAlu(periodo *&per)
     int id;
     char cpf[20];
     char nome[50];
-    arq = fopen(url,"r");
-    if(arq == nullptr)
+    arq = fopen(url, "r");
+    if (arq == nullptr)
         printf("Erro ao abrir arquivo\n");
     else
     {
-        while((fscanf(arq," %[^\n]s",ano))!= EOF)
+        while ((fscanf(arq, " %[^\n]s", ano)) != EOF)
         {
-            per = buscarPer(per,ano);
-            fscanf(arq," %d",&id);
-            fscanf(arq," %[^\n]s", nome);
-            fscanf(arq," %[^\n]s", cpf);
-            aluno *aux = (aluno*) malloc(sizeof(aluno));
+            periodo *per = buscarPer(init, ano);
+            fscanf(arq, " %d", &id);
+            fscanf(arq, " %[^\n]s", nome);
+            fscanf(arq, " %[^\n]s", cpf);
+            aluno *aux = (aluno *)malloc(sizeof(aluno));
             aux->prox = nullptr;
             aux->listMat = nullptr;
             aux->id = id;
-            strcpy(aux->nome,nome);
-            strcpy(aux->cpf,cpf);
+            strcpy(aux->nome, nome);
+            strcpy(aux->cpf, cpf);
             aux->prox = per->periodoAlu;
             per->periodoAlu = aux;
             aux->listMat = nullptr;
@@ -612,7 +616,7 @@ void readFileAlu(periodo *&per)
     }
 }
 
-void readFileMat(periodo *&per)
+void readFileMat(periodo *&init)
 {
     char url[20] = "materias.txt";
     FILE *arq;
@@ -621,24 +625,24 @@ void readFileMat(periodo *&per)
     char nome[50];
     char prof[50];
     int cred;
-    arq = fopen(url,"r");
-    if(arq == nullptr)
+    arq = fopen(url, "r");
+    if (arq == nullptr)
         printf("Erro ao abrir arquivo\n");
     else
     {
-        while((fscanf(arq," %[^\n]s",ano))!= EOF)
+        while ((fscanf(arq, " %[^\n]s", ano)) != EOF)
         {
-            per = buscarPer(per,ano);
-            fscanf(arq," %d",&id);
-            fscanf(arq," %[^\n]s",nome);
-            fscanf(arq," %[^\n]s",prof);
-            fscanf(arq," %d",&cred);
-            materia *aux = (materia*)malloc(sizeof(materia));
+            periodo *per = buscarPer(init, ano);
+            fscanf(arq, " %d", &id);
+            fscanf(arq, " %[^\n]s", nome);
+            fscanf(arq, " %[^\n]s", prof);
+            fscanf(arq, " %d", &cred);
+            materia *aux = (materia *)malloc(sizeof(materia));
             aux->prox = nullptr;
             aux->listAlu = nullptr;
             aux->id = id;
-            strcpy(aux->nome,nome);
-            strcpy(aux->professor,prof);
+            strcpy(aux->nome, nome);
+            strcpy(aux->professor, prof);
             aux->cred = cred;
             aux->prox = per->periodoMat;
             per->periodoMat = aux;
@@ -654,16 +658,16 @@ void readFileMatricula(periodo *&init)
     FILE *arq;
     char ano[10];
     int id_mat, id_alu;
-    arq = fopen(url,"r");
-    if(arq == nullptr)
+    arq = fopen(url, "r");
+    if (arq == nullptr)
         printf("Erro ao abrir arquivo\n");
     else
     {
-        while((fscanf(arq," %[^\n]s",ano))!= EOF)
+        while ((fscanf(arq, " %[^\n]s", ano)) != EOF)
         {
-            per = buscarPer(init,ano);
-            fscanf(arq," %d",&id_mat);
-            fscanf(arq," %d",&id_alu);
+            per = buscarPer(init, ano);
+            fscanf(arq, " %d", &id_mat);
+            fscanf(arq, " %d", &id_alu);
             materia *mat = buscarMatPer(per->periodoMat, id_mat);
             aluno *alu = buscarAluPer(per->periodoAlu, id_alu);
             listaAluno *aux_alu = (listaAluno *)malloc(sizeof(listaAluno));
@@ -684,14 +688,14 @@ void readFilePer(periodo *&inicio)
     char url[20] = "periodos.txt";
     FILE *arq;
     char ano[10];
-    arq = fopen(url,"r");
-    if(arq == nullptr)
+    arq = fopen(url, "r");
+    if (arq == nullptr)
         printf("Erro ao abrir arquivo\n");
     else
     {
-        while((fscanf(arq," %[^\n]s",ano)) != EOF)
+        while ((fscanf(arq, " %[^\n]s", ano)) != EOF)
         {
-            inserirPer(inicio,ano);
+            inserirPer(inicio, ano);
         }
         fclose(arq);
     }
@@ -719,7 +723,8 @@ int removeAluMat(materia *&mat, aluno *&alu)
         // return 1;
     }
     //atual->prox == nullptr, chegou ao final e não achou
-    else if(aluAnt->prox == nullptr){
+    else if (aluAnt->prox == nullptr)
+    {
         printf("Aluno nao esta na lista!\n");
         return 0;
     }
@@ -738,7 +743,8 @@ int removeAluMat(materia *&mat, aluno *&alu)
     if (matAnt == nullptr)
     {
         //se a head não existir, não faz nada
-        if(alu->listMat == nullptr){
+        if (alu->listMat == nullptr)
+        {
             printf("Materia nao pertence ao aluno!\n");
             return 0;
         }
@@ -750,7 +756,8 @@ int removeAluMat(materia *&mat, aluno *&alu)
         return 1;
     }
     //atual->prox == nullptr, chegou ao final e não achou
-    else if(matAnt->prox == nullptr){
+    else if (matAnt->prox == nullptr)
+    {
         printf("Aluno nao esta na lista!\n");
         return 0;
     }
@@ -819,7 +826,8 @@ int removeMatPer(periodo *&per, int id_mat)
     if (ant == nullptr)
     {
         //se a head não existir, não faz nada
-        if(per->periodoMat == nullptr){
+        if (per->periodoMat == nullptr)
+        {
             printf("Materia nao esta na lista!\n");
             return 0;
         }
@@ -829,7 +837,7 @@ int removeMatPer(periodo *&per, int id_mat)
         while (aluAtual)
         {
             //agora remove aluMat já tira o aluno da materia e a materia do aluno, alterando o ponteiro aluAtual->alu
-            listaAluno* aux = aluAtual->prox;
+            listaAluno *aux = aluAtual->prox;
             removeAluMat(atual, aluAtual->alu);
             aluAtual = aux;
         }
@@ -838,7 +846,8 @@ int removeMatPer(periodo *&per, int id_mat)
         return 1;
     }
     //atual->prox == nullptr, chegou ao final e não achou
-    else if(ant->prox == nullptr){
+    else if (ant->prox == nullptr)
+    {
         printf("Materia nao esta na lista!\n");
         return 0;
     }
@@ -847,7 +856,7 @@ int removeMatPer(periodo *&per, int id_mat)
     aluAtual = atual->listAlu;
     while (aluAtual)
     {
-        listaAluno* aux = aluAtual->prox;
+        listaAluno *aux = aluAtual->prox;
         removeAluMat(atual, aluAtual->alu);
         aluAtual = aux;
     }
@@ -864,7 +873,8 @@ int removePer(periodo *&per, char aux_ano[20])
     if (ant == nullptr)
     {
         //se a head não existir, não faz nada
-        if(per == nullptr){
+        if (per == nullptr)
+        {
             printf("Periodo nao existe!\n");
 
             return 0;
@@ -872,20 +882,21 @@ int removePer(periodo *&per, char aux_ano[20])
         atual = per;
         //head existe e quero remove-la, troco
 
-        per = atual -> prox;
+        per = atual->prox;
         delAlu(atual);
         delMat(atual);
         free(atual);
         return 1;
     }
     //atual->prox == nullptr, chegou ao final e não achou
-    else if(ant->prox == nullptr){
+    else if (ant->prox == nullptr)
+    {
         printf("Periodo nao existe!\n");
         return 0;
     }
     //coloca o prox pra apontar para o proximo da lista
     atual = ant->prox;
-    ant -> prox = atual -> prox;
+    ant->prox = atual->prox;
     delAlu(atual);
     delMat(atual);
     free(atual);
@@ -894,11 +905,11 @@ int removePer(periodo *&per, char aux_ano[20])
 
 int delPer(periodo *&init)
 {
-    if(init == nullptr)
+    if (init == nullptr)
         return 1;
     delPer(init->prox);
     removePer(init, init->ano);
-    init=nullptr;
+    init = nullptr;
     return 1;
 }
 
@@ -908,7 +919,7 @@ int main()
     periodo *init = nullptr;
     printf("Voce deseja recuperar os dados de uma sessao anterior?\n1. Sim\n0. Nao\n");
     scanf(" %d", &n);
-    if(n == 1)
+    if (n == 1)
     {
         readFilePer(init);
         readFileMat(init);
@@ -933,14 +944,14 @@ int main()
             break;
         case 3:
             printf("Digite o periodo que deseja remover:(ex:2021-1)\n");
-            scanf(" %9[^\n]s",temp);
+            scanf(" %9[^\n]s", temp);
             clean_stdin();
-            removePer(init,temp);
+            removePer(init, temp);
             break; // remover periodo
         case 5:
             printf("Ao salvar esta sessao, os dados da sessao anterior serao substituidos. Deseja Prosseguir?\n1. Sim\n0. Nao\n");
             scanf(" %d", &n);
-            if(n == 1)
+            if (n == 1)
             {
                 makeFilePer(init);
                 makeFileMat(init);
@@ -949,113 +960,115 @@ int main()
             }
             break;
         case 4:
+        {
+            printf("Escolha o periodo:\n");
+            scanf(" %9[^\n]s", temp);
+            clean_stdin();
+            periodo *aux_per = buscarPer(init, temp);
+            if (aux_per == nullptr)
+                printf("O periodo nao esta cadastrado\n");
+            else
             {
-                printf("Escolha o periodo:\n");
-                scanf(" %9[^\n]s", temp);
-                clean_stdin();
-                periodo *aux_per = buscarPer(init, temp);
-                if (aux_per == nullptr)
-                    printf("O periodo nao esta cadastrado\n");
-                else
+                int opcaoPer = -1;
+                do
                 {
-                    int opcaoPer = -1;
-                    do
+                    opcaoPer = menuPer(aux_per);
+                    switch (opcaoPer)
                     {
-                        opcaoPer = menuPer(aux_per);
-                        switch (opcaoPer)
+                    case 1:
+                        listarAluPer(aux_per);
+                        break;
+                    case 2:
+                        listarMatPer(aux_per);
+                        break;
+                    case 3:
+                        printf("Escolha o ID que deseja associar a esta materia:(numero natural de no maximo 4 digitos)\n");
+                        int temp_id_mat;
+                        scanf(" %d", &temp_id_mat);
+                        clean_stdin();
+                        inserirMatPer(aux_per, temp_id_mat);
+                        break;
+                    case 4:
+                        printf("Insira o ID da materia que deseja remover:\n");
+                        scanf(" %d", &temp_id_mat);
+                        clean_stdin();
+                        if (temp_id_mat < 0 || temp_id_mat > 9999)
+                            printf("ID invalido.\n");
+                        else
+                            removeMatPer(aux_per, temp_id_mat);
+                        break; //remover materia per
+                    case 5:
+                        printf("Escolha o ID que deseja associar a este aluno:(numero natural de no maximo 5 digitos)\n");
+                        int temp_id_alu;
+                        scanf(" %d", &temp_id_alu);
+                        clean_stdin();
+                        inserirAluPer(aux_per, temp_id_alu);
+                        break;
+                    case 6:
+                        printf("Insira o ID do aluno que deseja remover do periodo:\n");
+                        scanf(" %d", &temp_id_alu);
+                        clean_stdin();
+                        if (temp_id_alu < 0 || temp_id_alu > 99999)
+                            printf("ID invalido.\n");
+                        else
+                            removeAluPer(aux_per, temp_id_alu);
+                        break;
+                    case 7:
+                        printf("Insira o ID do aluno:\n");
+                        scanf(" %d", &temp_id_alu);
+                        clean_stdin();
+                        if (temp_id_alu < 0 || temp_id_alu > 99999)
+                            printf("ID invalido.\n");
+                        else
+                            dadosAlu(aux_per, temp_id_alu);
+                        break;
+                    case 8:
+                        printf("Insira o ID da materia:\n");
+                        scanf(" %d", &temp_id_mat);
+                        clean_stdin();
+                        if (temp_id_mat < 0 || temp_id_mat > 9999)
+                            printf("ID invalido.\n");
+                        else
                         {
-                        case 1:
-                            listarAluPer(init);
-                            break;
-                        case 2:
-                            listarMatPer(init);
-                            break;
-                        case 3:
-                            printf("Escolha o ID que deseja associar a esta materia:(numero natural de no maximo 4 digitos)\n");
-                            int temp_id_mat;
-                            scanf(" %d", &temp_id_mat);
-                            clean_stdin();
-                            inserirMatPer(init, temp_id_mat);
-                            break;
-                        case 4:
-                            printf("Insira o ID da materia que deseja remover:\n");
-                            scanf(" %d",&temp_id_mat);
-                            clean_stdin();
-                            if(temp_id_mat<0 || temp_id_mat>9999)
-                                printf("ID invalido.\n");
-                            else
-                                removeMatPer(init,temp_id_mat);
-                            break; //remover materia per
-                        case 5:
-                            printf("Escolha o ID que deseja associar a este aluno:(numero natural de no maximo 5 digitos)\n");
-                            int temp_id_alu;
-                            scanf(" %d", &temp_id_alu);
-                            clean_stdin();
-                            inserirAluPer(init, temp_id_alu);
-                            break;
-                        case 6:
-                            printf("Insira o ID do aluno que deseja remover do periodo:\n");
-                            scanf(" %d", &temp_id_alu);
-                            clean_stdin();
-                            if(temp_id_alu<0 || temp_id_alu>99999)
-                                printf("ID invalido.\n");
-                            else
-                                removeAluPer(init, temp_id_alu);
-                            break;
-                        case 7:
-                            printf("Insira o ID do aluno:\n");
-                            scanf(" %d", &temp_id_alu);
-                            clean_stdin();
-                            if(temp_id_alu<0 || temp_id_alu>99999)
-                                printf("ID invalido.\n");
-                            else
-                                dadosAlu(init, temp_id_alu);
-                            break;
-                        case 8:
-                            printf("Insira o ID da materia:\n");
-                            scanf(" %d", &temp_id_mat);
-                            clean_stdin();
-                            if(temp_id_mat<0 || temp_id_mat>9999)
-                                printf("ID invalido.\n");
+                            materia *aux = buscarMatPer(aux_per->periodoMat, temp_id_mat);
+                            if (aux == nullptr)
+                                printf("A materia nao esta cadastrada\n");
                             else
                             {
-                                materia *aux = buscarMatPer(init->periodoMat, temp_id_mat);
-                                if (aux == nullptr)
-                                    printf("A materia nao esta cadastrada\n");
-                                else
+                                int opcaoPerMat = -1;
+                                do
                                 {
-                                    int opcaoPerMat = -1;
-                                    do
+                                    opcaoPerMat = menuPerMat(aux);
+                                    switch (opcaoPerMat)
                                     {
-                                        opcaoPerMat = menuPerMat(aux);
-                                        switch (opcaoPerMat)
-                                        {
-                                        case 1:
-                                            dadosMat(init, temp_id_mat);
-                                            break;
-                                        case 2:
-                                            aluPorMat(init, temp_id_mat);
-                                            break;
-                                        case 3:
-                                            inserirAluMat(init,aux->id);
-                                            break;
-                                        case 4:
-                                            printf("Insira o ID do aluno que deseja remover da materia:\n");
-                                            scanf(" %d", &temp_id_alu);
-                                            clean_stdin();
-                                            listaAluno *aux_alu = buscarAluMat(aux->listAlu,temp_id_alu);
-                                            if(aux_alu != nullptr) removeAluMat(aux, aux_alu->alu);// funcao recebe como aluno* como parametro
-                                            else printf("Esse ID nao esta cadastrado\n");           // então preciso procurar aluno* com o id
-                                            break;
-                                        }
-                                     } while (opcaoPerMat);
-                                }
+                                    case 1:
+                                        dadosMat(aux_per, temp_id_mat);
+                                        break;
+                                    case 2:
+                                        aluPorMat(aux_per, temp_id_mat);
+                                        break;
+                                    case 3:
+                                        inserirAluMat(aux_per, aux->id);
+                                        break;
+                                    case 4:
+                                        printf("Insira o ID do aluno que deseja remover da materia:\n");
+                                        scanf(" %d", &temp_id_alu);
+                                        clean_stdin();
+                                        listaAluno *aux_alu = buscarAluMat(aux->listAlu, temp_id_alu);
+                                        if (aux_alu != nullptr)
+                                            removeAluMat(aux, aux_alu->alu); // funcao recebe como aluno* como parametro
+                                        else
+                                            printf("Esse ID nao esta cadastrado\n"); // então preciso procurar aluno* com o id
+                                        break;
+                                    }
+                                } while (opcaoPerMat);
                             }
                         }
-                    } while (opcaoPer);
-                }
-                break;
+                    }
+                } while (opcaoPer);
             }
+            break;
+        }
         }
     } while (opcaoMain);
     delPer(init);
