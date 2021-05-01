@@ -1,4 +1,3 @@
-
 // #include <bits/stdc++.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,8 +10,6 @@ struct materia;
 struct listaAluno;
 struct listaMateria;
 struct periodo;
-
-//função melhorada pra fflush, fflush varia pra linux e windows
 
 struct aluno
 {
@@ -152,6 +149,7 @@ periodo *buscarAnteriorPer(periodo *inicio, char aux_ano[20])
     return buscarAnteriorPer(inicio->prox, aux_ano);
 }
 
+//função melhorada pra fflush, fflush varia pra linux e windows
 void clean_stdin()
 {
     int c;
@@ -170,11 +168,11 @@ void dadosAlu(periodo *per, int id_alu)
         return;
     }
 
-    printf("ID\tNome\t\t\t\t\tCPF\t\t\tLista de Materias\n");
+    printf("ID - Nome - CPF - Lista de Materias\n");
 
-    printf("%.5d\t", aux->id);
-    printf("%s\r\t\t\t\t\t\t", aux->nome);
-    printf("%s\t\t", aux->cpf);
+    printf("%.5d - ", aux->id);
+    printf("%s - ", aux->nome);
+    printf("%s - ", aux->cpf);
     listaMateria *aux_listaMateria;
     aux_listaMateria = aux->listMat;
     while (aux_listaMateria != nullptr)
@@ -194,11 +192,11 @@ void dadosMat(periodo *per, int id_mat)
         printf("A materia com este ID nao esta cadastrada.\n");
         return;
     }
-    printf("ID\tCreditos\tNome\t\t\t\t\tProfessor\t\t\t\t\tLista de alunos\n");
-    printf("%.4d\t", aux->id);
-    printf("%d\t\t", aux->cred);
-    printf("%s\r\t\t\t\t\t\t\t\t", aux->nome);
-    printf("%s\r\t\t\t\t\t\t\t\t\t\t\t\t\t\t", aux->professor);
+    printf("ID - Creditos - Nome - Professor - Lista de alunos\n");
+    printf("%.4d - ", aux->id);
+    printf("%d - ", aux->cred);
+    printf("%s - ", aux->nome);
+    printf("%s - ", aux->professor);
     listaAluno *aux_listaAluno;
     aux_listaAluno = aux->listAlu;
     while (aux_listaAluno != nullptr)
